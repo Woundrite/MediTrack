@@ -152,6 +152,12 @@ export function Navbar() {
                 <UserAvatar />
               ) : (
                 <>
+                  <Link to="/hospital/registration" className="text-blue-600 font-bold hover:text-gray-900">
+                    Hospital Registration
+                  </Link>
+                  <Link to="/hospital/login" className="text-blue-400 font-bold hover:text-gray-900">
+                    Hospital Login
+                  </Link>
                   <Link to="/login" className="text-gray-600 hover:text-gray-900">
                     Log in
                   </Link>

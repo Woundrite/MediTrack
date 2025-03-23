@@ -17,6 +17,7 @@ import StartPage from './doc-dashboard/start/start.jsx';
 import View from './search/view.jsx';
 import Appointments from './appointments/appointments.jsx';
 import Settings from './settings/settings.jsx';
+import { Hospitallogin } from './components/Hospital DashBoard/Hospitallogin.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -41,7 +42,8 @@ createRoot(document.getElementById('root')).render(
             {/* Auth Routes without Layout */}
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/hospital" element={<Hospital/>} />
+            <Route path="/hospital/registration" element={<Hospital/>} />
+            <Route path="/hospital/login" element={<Hospitallogin/>} />
 
             {/* Protected Routes without Layout */}
             <Route
