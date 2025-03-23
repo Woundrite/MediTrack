@@ -2,17 +2,18 @@
 import { initializeApp } from "@firebase/app";
 import { getAuth, GoogleAuthProvider } from "@firebase/auth";
 import { getFirestore } from "@firebase/firestore";
-
+import 'dotenv/config';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+config({ path: __dirname + '.env' })
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "medichain-34411.firebasestorage.app",
-  messagingSenderId: "242594888475",
-  appId: "1:242594888475:web:c3220f5cd5eebc2d8431be",
-  measurementId: "G-N2NZHCT5G1"
+  apiKey: process.env.APIKEY_FIREBASE,
+  authDomain: process.env.AUTHDOMAIN_FIREBASE,
+  projectId: process.env.PROJECTID_FIREBASE,
+  storageBucket: process.env.STORAGEBUCKET_FIREBASE,
+  messagingSenderId: process.env.MESSAGINGSENDERID_FIREBASE,
+  appId: process.env.APPID_FIREBASE,
+  measurementId: process.env.MEASUREMENTID
 };
 
 // Initialize Firebase

@@ -2,7 +2,7 @@ import React from 'react';
 import chaturath from '../assets/chaturath.jpg';
 import helpage from '../assets/helpage.png';
 import swasth from '../assets/swasth.jpg';
-import  Antara from '../assets/antara.jpg'
+import Antara from '../assets/antara.jpg'
 
 const NGO = () => {
   return (
@@ -39,7 +39,7 @@ const NGO = () => {
             <div className="bg-gray-100 hover:bg-blue-50 p-6 rounded-lg transition">
               <div className="mb-4">
                 <img
-                  src= {helpage}
+                  src={helpage}
                   alt="HelpAge India"
                   className="h-32 w-32 mx-auto"
                 />
@@ -124,11 +124,11 @@ const NGO = () => {
           <div className="container relative w-1/2 ml-auto pl-8 py-10">
             <div className="absolute top-10 left-[-10px] w-4 h-4 bg-white border-4 border-blue-500 rounded-full"></div>
             <div className="bg-gray-100 hover:bg-blue-50 p-6 rounded-lg transition">
-            <img
-                  src= {chaturath}
-                  alt="Swasth Foundation"
-                  className="h-26 w-48 mx-auto"
-                />
+              <img
+                src={chaturath}
+                alt="Swasth Foundation"
+                className="h-26 w-48 mx-auto"
+              />
 
               <h2 className="text-2xl font-bold text-blue-500 mb-2 text-center">
                 Charutar Arogya Mandal
@@ -178,7 +178,7 @@ const NGO = () => {
               </a>
             </li>
           </ul>
-          <p className="mb-4">&copy; 2024 MediChain. All rights reserved.</p>
+          <p className="mb-4">&copy; 2024 MediTrack. All rights reserved.</p>
           <form action="#" method="post" className="flex flex-col items-center gap-4">
             <input
               type="email"

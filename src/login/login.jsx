@@ -194,7 +194,7 @@ export default function LoginPage() {
         <div className="w-32 h-32 bg-gray-300 rounded-full mb-8"></div>
         <h2 className="text-3xl font-bold mb-4">Welcome to Medi-Chain</h2>
         <p className="text-gray-600 text-center max-w-md">
-          "Your health, your control – MediChain simplifies care, secures your records, and connects you to
+          "Your health, your control – MediTrack simplifies care, secures your records, and connects you to
           better healthcare anytime, anywhere."
         </p>
       </div>

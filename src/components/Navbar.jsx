@@ -29,7 +29,7 @@ export function Navbar() {
             setUserType('patient');
             return;
           }
-          
+
           // Check in doctors collection
           const doctorDoc = await getDoc(doc(db, 'doctors', currentUser.uid));
           if (doctorDoc.exists()) {
@@ -59,60 +59,61 @@ export function Navbar() {
     const [imageError, setImageError] = useState(false);
 
     return (
-    <div className="relative">
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none overflow-hidden"
-      >
-        {currentUser?.photoURL && !imageError ? (
-          <img 
-            src={currentUser.photoURL}
-            alt="Profile"
-            className="w-full h-full object-cover"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white">
-            {getInitial()}
-          </div>
-        )}
-      </button>
-      {menuOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
-          <div className="p-2 border-b">
-            <p className="text-sm font-medium text-gray-900">
-              {currentUser?.displayName || currentUser?.email}
-            </p>
-            <p className="text-xs text-gray-500">
-              {userType?.charAt(0).toUpperCase() + userType?.slice(1)}
-            </p>
-          </div>
-          {userType === 'patient' && (
+      <div className="relative">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none overflow-hidden"
+        >
+          {currentUser?.photoURL && !imageError ? (
+            <img
+              src={currentUser.photoURL}
+              alt="Profile"
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white">
+              {getInitial()}
+            </div>
+          )}
+        </button>
+        {menuOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+            <div className="p-2 border-b">
+              <p className="text-sm font-medium text-gray-900">
+                {currentUser?.displayName || currentUser?.email}
+              </p>
+              <p className="text-xs text-gray-500">
+                {userType?.charAt(0).toUpperCase() + userType?.slice(1)}
+              </p>
+            </div>
+            {userType === 'patient' && (
+              <Link
+                to="/appointments"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                onClick={() => setMenuOpen(false)}
+              >
+                My Appointments
+              </Link>
+            )}
             <Link
-              to="/appointments"
+              to="/settings"
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
               onClick={() => setMenuOpen(false)}
             >
-              My Appointments
+              Settings
             </Link>
-          )}
-          <Link 
-            to="/settings"
-            className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-            onClick={() => setMenuOpen(false)}
-          >
-            Settings
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
-          >
-            Sign Out
-          </button>
-        </div>
-      )}
-    </div>
-  )};
+            <button
+              onClick={handleLogout}
+              className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+            >
+              Sign Out
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 z-50 fixed w-full top-0 left-0">
@@ -120,7 +121,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">MediChain</span>
+            <span className="text-2xl font-bold text-blue-600">MediTrack</span>
           </Link>
 
           {/* Mobile menu button */}
@@ -142,9 +143,6 @@ export function Navbar() {
             <div className="space-x-4">
               <Link to="/" className="text-gray-600 hover:text-gray-900">
                 Find Doctors
-              </Link>
-              <Link to="/help" className="text-gray-600 hover:text-gray-900">
-                Connect with NGOs
               </Link>
             </div>
 
@@ -179,13 +177,6 @@ export function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Find Doctors
-              </Link>
-              <Link
-                to="/help"
-                className="block px-3 py-2 text-gray-600 hover:text-gray-900"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Connect with NGOs
               </Link>
               {currentUser && userType === 'patient' ? (
                 <button

@@ -146,18 +146,16 @@ export default function SignupPage() {
                     <div className="flex mb-6">
                         <button
                             type="button"
-                            className={`flex-1 py-3 rounded-l-lg font-medium transition-colors ${
-                                userType === 'patient' ? 'bg-green-500 text-white' : 'bg-gray-200'
-                            }`}
+                            className={`flex-1 py-3 rounded-l-lg font-medium transition-colors ${userType === 'patient' ? 'bg-green-500 text-white' : 'bg-gray-200'
+                                }`}
                             onClick={() => setUserType('patient')}
                         >
-                          Patient
+                            Patient
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 py-3 rounded-r-lg font-medium transition-colors ${
-                                userType === 'doctor' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                            }`}
+                            className={`flex-1 py-3 rounded-r-lg font-medium transition-colors ${userType === 'doctor' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                                }`}
                             onClick={() => setUserType('doctor')}
                         >
                             Doctor
@@ -269,7 +267,7 @@ export default function SignupPage() {
                 <div className="w-32 h-32 bg-gray-300 rounded-full mb-8"></div>
                 <h2 className="text-3xl font-bold mb-4">Welcome to Medi-Chain</h2>
                 <p className="text-gray-600 text-center max-w-md">
-                    "Your health, your control – MediChain simplifies care, secures your records, and connects you to better healthcare anytime, anywhere."
+                    "Your health, your control – MediTrack simplifies care, secures your records, and connects you to better healthcare anytime, anywhere."
                 </p>
             </div>
         </div>
