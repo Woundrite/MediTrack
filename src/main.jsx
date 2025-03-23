@@ -7,6 +7,7 @@ import Dashboard from './doc-dashboard/dashboard.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import SignupPage from './signup/signup.jsx';
 import { AuthProvider } from './AuthContext.jsx';
+import { Hospital } from './components/Hospital DashBoard/Hospital.jsx';
 import LoginPage from './login/login.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import NGO from './NGOs/ngo.jsx';
@@ -40,6 +41,7 @@ createRoot(document.getElementById('root')).render(
             {/* Auth Routes without Layout */}
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/hospital" element={<Hospital/>} />
 
             {/* Protected Routes without Layout */}
             <Route
