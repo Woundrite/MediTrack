@@ -29,7 +29,6 @@ createRoot(document.getElementById('root')).render(
             <Route path="/" element={<Layout />}>
               {/* Public Routes */}
               <Route index element={<App />} />
-              <Route path="help" element={<NGO />} />
               <Route path="search" element={<SearchPage />} />
               <Route path="view" element={<View />} />
               <Route path="appointments" element={<PrivateRoute>
