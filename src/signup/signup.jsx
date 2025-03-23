@@ -16,6 +16,8 @@ export default function SignupPage() {
         password: '',
         specialty: '',
         location: '',
+        organization: '',
+        AadharNumber: ''
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -30,34 +32,35 @@ export default function SignupPage() {
         }));
     };
 
-    const generateSearchKeywords = (name, specialty) => {
+    const generateSearchKeywords = (name, specialty, organization) => {
         const keywords = [];
         const nameKeywords = name.toLowerCase().split(' ');
         const specialtyKeywords = specialty.toLowerCase().split(' ');
+        const orgKeywords = organization.toLowerCase().split(' ');
 
-        keywords.push(name.toLowerCase(), specialty.toLowerCase());
-        keywords.push(...nameKeywords);
-        keywords.push(...specialtyKeywords);
+        keywords.push(name.toLowerCase(), specialty.toLowerCase(), organization.toLowerCase());
+        keywords.push(...nameKeywords, ...specialtyKeywords, ...orgKeywords);
 
         return keywords;
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { email, password, firstName, lastName, specialty, location } = formData;
+        const { email, password, firstName, lastName, specialty, location, organization, AdharNumber } = formData;
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
             const name = `${firstName} ${lastName}`;
-
             let userData = {
                 uid: user.uid,
                 firstName,
                 lastName,
                 email,
-                role: userType, // 'patient' or 'doctor'
+                role: userType,
                 createdAt: new Date(),
+                AdharNumber 
             };
 
             let collectionName = 'patients';
@@ -68,6 +71,7 @@ export default function SignupPage() {
                     ...userData,
                     specialty,
                     location,
+                    organization,
                     name,
                     searchKeywords: generateSearchKeywords(name, specialty),
                 };
@@ -220,6 +224,10 @@ export default function SignupPage() {
                             required
                             minLength={6}
                         />
+                         <InputField label="Adhar Number"
+                                   placeholder="Enter your 12-digit Aadhar Number" 
+                                   name="AdharNumber" 
+                                   value={formData.AdharNumber} onChange={handleChange} required />
 
                         {/* Additional Fields for Doctors */}
                         {userType === 'doctor' && (
@@ -241,7 +249,13 @@ export default function SignupPage() {
                                     onChange={handleChange}
                                     required
                                 />
+                                 <InputField label="Organization Name"
+                                  placeholder="XYZ"
+                                  name="organization" 
+                                  value={formData.organization} onChange={handleChange} required />
+                                   
                             </>
+                            
                         )}
 
                         <button
