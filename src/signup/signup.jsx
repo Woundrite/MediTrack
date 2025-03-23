@@ -20,8 +20,12 @@ export default function SignupPage() {
         password: '',
         specialty: '',
         location: '',
+<<<<<<< Updated upstream
         organization: '',
         AadharNumber: ''
+=======
+        aadhar: ''
+>>>>>>> Stashed changes
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -76,7 +80,11 @@ export default function SignupPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+<<<<<<< Updated upstream
         const { email, password, firstName, lastName, specialty, location, organization, AdharNumber } = formData;
+=======
+        const { email, password, firstName, lastName, specialty, location, aadhar } = formData;
+>>>>>>> Stashed changes
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -89,7 +97,11 @@ export default function SignupPage() {
                 email,
                 role: userType,
                 createdAt: new Date(),
+<<<<<<< Updated upstream
                 AdharNumber 
+=======
+                aadhar
+>>>>>>> Stashed changes
             };
 =======
   const handleSubmit = async (e) => {
@@ -161,6 +173,7 @@ export default function SignupPage() {
     }
   };
 
+<<<<<<< Updated upstream
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -223,6 +236,14 @@ export default function SignupPage() {
           <h1 className="text-3xl font-bold mb-8">
             Create a free account as a{" "}
           </h1>
+=======
+    return (
+        <div className="min-h-screen flex text-left">
+            {/* Left Side - Form */}
+            <div className="w-full lg:w-1/2 p-8 flex flex-col justify-center">
+                <div className="max-w-md mx-auto w-full">
+                    <h1 className="text-3xl font-bold mb-8">Create a free account as a </h1>
+>>>>>>> Stashed changes
 
           {/* Toggle User Type */}
           <div className="flex mb-6">
@@ -248,6 +269,7 @@ export default function SignupPage() {
             </button>
           </div>
 
+<<<<<<< Updated upstream
           {/* Google Sign-Up */}
           <SocialButton
             icon={FcGoogle}
@@ -262,6 +284,14 @@ export default function SignupPage() {
             <span className="px-4 text-gray-500 text-sm">OR</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
+=======
+                    {/* Separator */}
+                    <div className="my-6 flex items-center">
+                        <div className="flex-1 border-t border-gray-300"></div>
+                        <span className="px-4 text-gray-500 text-sm">OR</span>
+                        <div className="flex-1 border-t border-gray-300"></div>
+                    </div>
+>>>>>>> Stashed changes
 
           {/* Error Message */}
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}

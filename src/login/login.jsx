@@ -118,21 +118,6 @@ export default function LoginPage() {
       <div className="w-full lg:w-1/2 p-8 flex flex-col justify-center">
         <div className="max-w-md mx-auto w-full">
           <h1 className="text-3xl font-bold mb-8">Log in to your account</h1>
-
-          <SocialButton
-            icon={FcGoogle}
-            provider="Google"
-            className="bg-blue-600 mb-3"
-            onClick={handleGoogleSignIn}
-          />
-
-          <SocialButton
-            icon={FaXTwitter}
-            provider="X"
-            className="bg-black"
-            onClick={() => console.log('X login')}
-          />
-
           <div className="my-6 flex items-center">
             <div className="flex-1 border-t border-gray-300"></div>
             <span className="px-4 text-gray-500 text-sm">OR</span>
