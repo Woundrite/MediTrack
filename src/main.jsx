@@ -11,7 +11,7 @@ import { Hospital } from './components/Hospital DashBoard/Hospital.jsx';
 import LoginPage from './login/login.jsx';
 import PrivateRoute from './PrivateRoute.jsx';
 import NGO from './NGOs/ngo.jsx';
-import Layout from './components/Layout.jsx'; // Import Layout
+import Layout from './components/layout.jsx'; // Import Layout
 import SearchPage from './search/search.jsx';
 import StartPage from './doc-dashboard/start/start.jsx';
 import View from './search/view.jsx';
@@ -30,20 +30,20 @@ createRoot(document.getElementById('root')).render(
               {/* Public Routes */}
               <Route index element={<App />} />
               <Route path="help" element={<NGO />} />
-              <Route path="search" element={<SearchPage/>}/>
+              <Route path="search" element={<SearchPage />} />
               <Route path="view" element={<View />} />
               <Route path="appointments" element={<PrivateRoute>
                 <Appointments />
               </PrivateRoute>} />
               <Route path="settings" element={<PrivateRoute>
-                <Settings/></PrivateRoute>} />
+                <Settings /></PrivateRoute>} />
             </Route>
 
             {/* Auth Routes without Layout */}
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/hospital/registration" element={<Hospital/>} />
-            <Route path="/hospital/login" element={<Hospitallogin/>} />
+            <Route path="/hospital/registration" element={<Hospital />} />
+            <Route path="/hospital/login" element={<Hospitallogin />} />
 
             {/* Protected Routes without Layout */}
             <Route
