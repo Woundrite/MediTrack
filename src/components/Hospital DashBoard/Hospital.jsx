@@ -43,8 +43,6 @@ export const Hospital = () => {
         mobile
       };
 
-      console.log("kajshgfalskjdf")
-
       let collectionName = 'hospitals';
 
       await setDoc(doc(db, collectionName, user.uid), userData);

@@ -1,15 +1,12 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { FaXTwitter } from "react-icons/fa6";
-import { SocialButton } from "./SocialButton";
-import { InputField } from "./InputField";
-import { auth, googleProvider, db } from "../firebase/config";
-import {
-    createUserWithEmailAndPassword,
-    signInWithPopup,
-} from "@firebase/auth";
-import { doc, setDoc } from "@firebase/firestore";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
+import { FaXTwitter } from 'react-icons/fa6';
+import { SocialButton } from './SocialButton';
+import { InputField } from './InputField';
+import { auth, googleProvider, db } from '../firebase/config';
+import { createUserWithEmailAndPassword, signInWithPopup } from '@firebase/auth';
+import { doc, setDoc } from '@firebase/firestore';
 
 export default function SignupPage() {
     const [formData, setFormData] = useState({
@@ -20,13 +17,12 @@ export default function SignupPage() {
         specialty: '',
         location: '',
         organization: '',
-        AadharNumber: '',
-        aadhar: ''
+        AadharNumber: ''
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const [userType, setUserType] = useState("patient");
+    const [userType, setUserType] = useState('patient');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,26 +32,27 @@ export default function SignupPage() {
         }));
     };
 
-    const generateSearchKeywords = (name, specialty) => {
+    const generateSearchKeywords = (name, specialty, organization) => {
         const keywords = [];
-        const nameKeywords = name.toLowerCase().split(" ");
-        const specialtyKeywords = specialty.toLowerCase().split(" ");
+        const nameKeywords = name.toLowerCase().split(' ');
+        const specialtyKeywords = specialty.toLowerCase().split(' ');
+        const orgKeywords = organization.toLowerCase().split(' ');
 
-        keywords.push(name.toLowerCase(), specialty.toLowerCase());
-        keywords.push(...nameKeywords);
-        keywords.push(...specialtyKeywords);
+        keywords.push(name.toLowerCase(), specialty.toLowerCase(), organization.toLowerCase());
+        keywords.push(...nameKeywords, ...specialtyKeywords, ...orgKeywords);
 
         return keywords;
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { email, password, firstName, lastName, specialty, location, aadhar } = formData;
+        const { email, password, firstName, lastName, specialty, location, organization, AdharNumber } = formData;
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            const name = `${firstName} ${lastName}`;
+            const name = ${ firstName } ${ lastName };
             let userData = {
                 uid: user.uid,
                 firstName,
@@ -63,13 +60,84 @@ export default function SignupPage() {
                 email,
                 role: userType,
                 createdAt: new Date(),
-                aadhar
+                AdharNumber
             };
+
+            let collectionName = 'patients';
+
+            if (userType === 'doctor') {
+                collectionName = 'doctors';
+                userData = {
+                    ...userData,
+                    specialty,
+                    location,
+                    organization,
+                    name,
+                    searchKeywords: generateSearchKeywords(name, specialty),
+                };
+            }
+
+            await setDoc(doc(db, collectionName, user.uid), userData);
+
+            console.log(${ userType.charAt(0).toUpperCase() + userType.slice(1) } signed up:, user);
+
+            if (userType === 'doctor') {
+                navigate('/dashboard');
+            } else {
+                navigate('/');
+            }
         } catch (err) {
             console.error(err);
             setError(err.message);
         }
-    }
+    };
+
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+
+            const name = user.displayName || '';
+            const firstName = name.split(' ')[0] || '';
+            const lastName = name.split(' ')[1] || '';
+
+            let userData = {
+                uid: user.uid,
+                firstName,
+                lastName,
+                email: user.email,
+                role: userType, // 'patient' or 'doctor'
+                photoURL: user.photoURL || '',
+                createdAt: new Date(),
+            };
+
+            let collectionName = 'patients';
+
+            if (userType === 'doctor') {
+                collectionName = 'doctors';
+                userData = {
+                    ...userData,
+                    specialty: formData.specialty,
+                    location: formData.location,
+                    name,
+                    searchKeywords: generateSearchKeywords(name, formData.specialty),
+                };
+            }
+
+            await setDoc(doc(db, collectionName, user.uid), userData, { merge: true });
+
+            console.log(${ userType.charAt(0).toUpperCase() + userType.slice(1) } signed in with Google:, user);
+
+            if (userType === 'doctor') {
+                navigate('/dashboard');
+            } else {
+                navigate('/');
+            }
+        } catch (err) {
+            console.error(err);
+            setError(err.message);
+        }
+    };
 
     return (
         <div className="min-h-screen flex text-left">
@@ -82,23 +150,29 @@ export default function SignupPage() {
                     <div className="flex mb-6">
                         <button
                             type="button"
-                            className={`flex-1 py-3 rounded-l-lg font-medium transition-colors ${userType === "patient"
-                                ? "bg-green-500 text-white"
-                                : "bg-gray-200"
+                            className={`flex-1 py-3 rounded-l-lg font-medium transition-colors ${userType === 'patient' ? 'bg-green-500 text-white' : 'bg-gray-200'
                                 }`}
-                            onClick={() => setUserType("patient")}
+                            onClick={() => setUserType('patient')}
                         >
                             Patient
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 py-3 rounded-r-lg font-medium transition-colors ${userType === "doctor" ? "bg-blue-500 text-white" : "bg-gray-200"
+                            className={`flex-1 py-3 rounded-r-lg font-medium transition-colors ${userType === 'doctor' ? 'bg-blue-500 text-white' : 'bg-gray-200'
                                 }`}
-                            onClick={() => setUserType("doctor")}
+                            onClick={() => setUserType('doctor')}
                         >
                             Doctor
                         </button>
                     </div>
+
+                    {/* Google Sign-Up */}
+                    <SocialButton
+                        icon={FcGoogle}
+                        provider="Google"
+                        className="bg-blue-600 mb-3"
+                        onClick={handleGoogleSignIn}
+                    />
 
                     {/* Separator */}
                     <div className="my-6 flex items-center">
@@ -143,67 +217,76 @@ export default function SignupPage() {
                         <InputField
                             label="Password"
                             type="password"
-                            placeholder="********"
+                            placeholder=""
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             required
                             minLength={6}
                         />
+                        <InputField label="Adhar Number"
+                            placeholder="Enter your 12-digit Aadhar Number"
+                            name="AdharNumber"
+                            value={formData.AdharNumber} onChange={handleChange} required />
 
                         {/* Additional Fields for Doctors */}
-                        {
-                            userType === "doctor" && (
-                                <>
-                                    <InputField
-                                        label="Specialty"
-                                        placeholder="Cardiologist"
-                                        name="specialty"
-                                        value={formData.specialty}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                        {userType === 'doctor' && (
+                            <>
+                                <InputField
+                                    label="Specialty"
+                                    placeholder="Cardiologist"
+                                    name="specialty"
+                                    value={formData.specialty}
+                                    onChange={handleChange}
+                                    required
+                                />
 
-                                    <InputField
-                                        label="Location"
-                                        placeholder="New York"
-                                        name="location"
-                                        value={formData.location}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </>
-                            )}
+                                <InputField
+                                    label="Location"
+                                    placeholder="New York"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <InputField label="Organization Name"
+                                    placeholder="XYZ"
+                                    name="organization"
+                                    value={formData.organization} onChange={handleChange} required />
+                                <InputField label="Adhar Number"
+                                    placeholder="Enter your 12-digit Aadhar Number"
+                                    name="AdharNumber"
+                                    value={formData.AdharNumber} onChange={handleChange} required />
+                            </>
+
+                        )}
 
                         <button
                             type="submit"
                             className="w-full bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 transition-colors mb-4"
                         >
-                            {userType === "doctor"
-                                ? "Sign up as Doctor"
-                                : "Sign up as Patient"}
+                            {userType === 'doctor' ? 'Sign up as Doctor' : 'Sign up as Patient'}
                         </button>
                     </form>
 
                     {/* Footer Link */}
                     <p className="text-center text-gray-600">
-                        Already have an account?{" "}
+                        Already have an account?{' '}
                         <Link to="/login" className="text-blue-600 hover:underline">
                             Log in
                         </Link>
                     </p>
-                </div >
-            </div >
+                </div>
+            </div>
 
             {/* Right Side - Welcome Message */}
-            < div className="hidden lg:flex w-1/2 bg-gray-100 p-8 flex-col items-center justify-center" >
+            <div className="hidden lg:flex w-1/2 bg-gray-100 p-8 flex-col items-center justify-center">
                 <div className="w-32 h-32 bg-gray-300 rounded-full mb-8"></div>
                 <h2 className="text-3xl font-bold mb-4">Welcome to Medi-Chain</h2>
                 <p className="text-gray-600 text-center max-w-md">
-                    "Your health, your control – MediTrack simplifies care, secures your
-                    records, and connects you to better healthcare anytime, anywhere."
+                    "Your health, your control – MediTrack simplifies care, secures your records, and connects you to better healthcare anytime, anywhere."
                 </p>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 }

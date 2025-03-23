@@ -29,13 +29,27 @@ function Dashboard() {
         const appointmentsRef = collection(db, 'appointments');
         const q = query(appointmentsRef, where('patientId', '==', currentUser.uid));
         const querySnapshot = await getDocs(q);
-        
+
         const fetchedAppointments = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
           startTime: doc.data().date.toDate(),
         }));
 
+        fetchedAppointments.map(appointment => {
+          const q = query(appointmentsRef, where('doctorId', '==', appointment.doctorId));
+          getDocs(q).then(querySnapshot => {
+
+            const fetchedAppointments = querySnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+              startTime: doc.data().date.toDate(),
+            }));
+
+            console.log(fetchedAppointments);
+          });
+
+        });
         setAppointments(fetchedAppointments);
       } catch (err) {
         console.error('Error fetching appointments:', err);
@@ -83,9 +97,9 @@ function Dashboard() {
       }, { merge: true });
 
       // Update local state to reflect the change
-      setAppointments(prevAppointments => 
-        prevAppointments.map(apt => 
-          apt.id === appointmentId 
+      setAppointments(prevAppointments =>
+        prevAppointments.map(apt =>
+          apt.id === appointmentId
             ? { ...apt, status: 'cancelled' }
             : apt
         )
@@ -123,7 +137,7 @@ function Dashboard() {
     <div className="max-w-3xl mx-auto p-6 text-left">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">My Appointments</h1>
-        
+
         {currentUser ? (
           <div className="relative">
             <div
@@ -157,12 +171,12 @@ function Dashboard() {
           <div className="text-gray-600">Loading...</div>
         )}
       </div>
-      
+
       <BookingTabs
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
-      
+
       {filteredAppointments.length === 0 ? (
         <p className="text-gray-500 text-center py-8">
           No {activeTab.toLowerCase()} appointments found
