@@ -79,8 +79,6 @@ export default function SignupPage() {
 
             await setDoc(doc(db, collectionName, user.uid), userData);
 
-            console.log(${ userType.charAt(0).toUpperCase() + userType.slice(1) } signed up:, user);
-
             if (userType === 'doctor') {
                 navigate('/dashboard');
             } else {
@@ -125,8 +123,6 @@ export default function SignupPage() {
             }
 
             await setDoc(doc(db, collectionName, user.uid), userData, { merge: true });
-
-            console.log(${ userType.charAt(0).toUpperCase() + userType.slice(1) } signed in with Google:, user);
 
             if (userType === 'doctor') {
                 navigate('/dashboard');
