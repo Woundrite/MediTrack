@@ -53,9 +53,15 @@ function AppointmentCard({ appointment, handleCancelAppointment }) {
               <div className="flex items-center gap-2">
                 <span>Location: {appointment.location || 'Online Consultation'}</span>
               </div>
+              <div className="flex items-center gap-2">
+                <span>Token No.: {appointment.tokenNumber || 'N/A'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>Estimated Time: {appointment.estimatedTime || 'To be updated'}</span>
+              </div>
             </div>
-          </div>
-        </div>
+          </div>  
+        </div> {/* <-- Closing div for flex items */}
 
         {/* Action Button */}
         {appointment.status !== 'cancelled' && new Date(appointment.startTime) > new Date() && (

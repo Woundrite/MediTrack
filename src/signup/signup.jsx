@@ -1,14 +1,18 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc';
-import { FaXTwitter } from 'react-icons/fa6';
-import { SocialButton } from './SocialButton';
-import { InputField } from './InputField';
-import { auth, googleProvider, db } from '../firebase/config';
-import { createUserWithEmailAndPassword, signInWithPopup } from '@firebase/auth';
-import { doc, setDoc } from '@firebase/firestore';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { FaXTwitter } from "react-icons/fa6";
+import { SocialButton } from "./SocialButton";
+import { InputField } from "./InputField";
+import { auth, googleProvider, db } from "../firebase/config";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+} from "@firebase/auth";
+import { doc, setDoc } from "@firebase/firestore";
 
 export default function SignupPage() {
+<<<<<<< Updated upstream
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -21,17 +25,31 @@ export default function SignupPage() {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+=======
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    specialty: "",
+    location: "",
+    
+  });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+>>>>>>> Stashed changes
 
-    const [userType, setUserType] = useState('patient');
+  const [userType, setUserType] = useState("patient");
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
+<<<<<<< Updated upstream
     const generateSearchKeywords = (name, specialty, organization) => {
         const keywords = [];
         const nameKeywords = name.toLowerCase().split(' ');
@@ -40,10 +58,21 @@ export default function SignupPage() {
 
         keywords.push(name.toLowerCase(), specialty.toLowerCase(), organization.toLowerCase());
         keywords.push(...nameKeywords, ...specialtyKeywords, ...orgKeywords);
+=======
+  const generateSearchKeywords = (name, specialty) => {
+    const keywords = [];
+    const nameKeywords = name.toLowerCase().split(" ");
+    const specialtyKeywords = specialty.toLowerCase().split(" ");
 
-        return keywords;
-    };
+    keywords.push(name.toLowerCase(), specialty.toLowerCase());
+    keywords.push(...nameKeywords);
+    keywords.push(...specialtyKeywords);
+>>>>>>> Stashed changes
 
+    return keywords;
+  };
+
+<<<<<<< Updated upstream
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,9 +91,34 @@ export default function SignupPage() {
                 createdAt: new Date(),
                 AdharNumber 
             };
+=======
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password, firstName, lastName, specialty, location } =
+      formData;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
 
-            let collectionName = 'patients';
+      const name = `${firstName} ${lastName}`;
 
+      let userData = {
+        uid: user.uid,
+        firstName,
+        lastName,
+        email,
+        role: userType, // 'patient' or 'doctor'
+        createdAt: new Date(),
+      };
+>>>>>>> Stashed changes
+
+      let collectionName = "patients";
+
+<<<<<<< Updated upstream
             if (userType === 'doctor') {
                 collectionName = 'doctors';
                 userData = {
@@ -76,144 +130,173 @@ export default function SignupPage() {
                     searchKeywords: generateSearchKeywords(name, specialty),
                 };
             }
+=======
+      if (userType === "doctor") {
+        collectionName = "doctors";
+        userData = {
+          ...userData,
+          specialty,
+          location,
+          name,
+          searchKeywords: generateSearchKeywords(name, specialty),
+        };
+      }
+>>>>>>> Stashed changes
 
-            await setDoc(doc(db, collectionName, user.uid), userData);
+      await setDoc(doc(db, collectionName, user.uid), userData);
 
-            console.log(`${userType.charAt(0).toUpperCase() + userType.slice(1)} signed up:`, user);
+      console.log(
+        `${userType.charAt(0).toUpperCase() + userType.slice(1)} signed up:`,
+        user
+      );
 
-            if (userType === 'doctor') {
-                navigate('/dashboard');
-            } else {
-                navigate('/');
-            }
-        } catch (err) {
-            console.error(err);
-            setError(err.message);
-        }
-    };
+      if (userType === "doctor") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
 
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
 
-            const name = user.displayName || '';
-            const firstName = name.split(' ')[0] || '';
-            const lastName = name.split(' ')[1] || '';
+      const name = user.displayName || "";
+      const firstName = name.split(" ")[0] || "";
+      const lastName = name.split(" ")[1] || "";
 
-            let userData = {
-                uid: user.uid,
-                firstName,
-                lastName,
-                email: user.email,
-                role: userType, // 'patient' or 'doctor'
-                photoURL: user.photoURL || '',
-                createdAt: new Date(),
-            };
+      let userData = {
+        uid: user.uid,
+        firstName,
+        lastName,
+        email: user.email,
+        role: userType, // 'patient' or 'doctor'
+        photoURL: user.photoURL || "",
+        createdAt: new Date(),
+      };
 
-            let collectionName = 'patients';
+      let collectionName = "patients";
 
-            if (userType === 'doctor') {
-                collectionName = 'doctors';
-                userData = {
-                    ...userData,
-                    specialty: formData.specialty,
-                    location: formData.location,
-                    name,
-                    searchKeywords: generateSearchKeywords(name, formData.specialty),
-                };
-            }
+      if (userType === "doctor") {
+        collectionName = "doctors";
+        userData = {
+          ...userData,
+          specialty: formData.specialty,
+          location: formData.location,
+          name,
+          searchKeywords: generateSearchKeywords(name, formData.specialty),
+        };
+      }
 
-            await setDoc(doc(db, collectionName, user.uid), userData, { merge: true });
+      await setDoc(doc(db, collectionName, user.uid), userData, {
+        merge: true,
+      });
 
-            console.log(`${userType.charAt(0).toUpperCase() + userType.slice(1)} signed in with Google:`, user);
+      console.log(
+        `${
+          userType.charAt(0).toUpperCase() + userType.slice(1)
+        } signed in with Google:`,
+        user
+      );
 
-            if (userType === 'doctor') {
-                navigate('/dashboard');
-            } else {
-                navigate('/');
-            }
-        } catch (err) {
-            console.error(err);
-            setError(err.message);
-        }
-    };
+      if (userType === "doctor") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
 
-    return (
-        <div className="min-h-screen flex text-left">
-            {/* Left Side - Form */}
-            <div className="w-full lg:w-1/2 p-8 flex flex-col justify-center">
-                <div className="max-w-md mx-auto w-full">
-                    <h1 className="text-3xl font-bold mb-8">Create a free account as a </h1>
+  return (
+    <div className="min-h-screen flex text-left">
+      {/* Left Side - Form */}
+      <div className="w-full lg:w-1/2 p-8 flex flex-col justify-center">
+        <div className="max-w-md mx-auto w-full">
+          <h1 className="text-3xl font-bold mb-8">
+            Create a free account as a{" "}
+          </h1>
 
-                    {/* Toggle User Type */}
-                    <div className="flex mb-6">
-                        <button
-                            type="button"
-                            className={`flex-1 py-3 rounded-l-lg font-medium transition-colors ${userType === 'patient' ? 'bg-green-500 text-white' : 'bg-gray-200'
-                                }`}
-                            onClick={() => setUserType('patient')}
-                        >
-                            Patient
-                        </button>
-                        <button
-                            type="button"
-                            className={`flex-1 py-3 rounded-r-lg font-medium transition-colors ${userType === 'doctor' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                                }`}
-                            onClick={() => setUserType('doctor')}
-                        >
-                            Doctor
-                        </button>
-                    </div>
+          {/* Toggle User Type */}
+          <div className="flex mb-6">
+            <button
+              type="button"
+              className={`flex-1 py-3 rounded-l-lg font-medium transition-colors ${
+                userType === "patient"
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200"
+              }`}
+              onClick={() => setUserType("patient")}
+            >
+              Patient
+            </button>
+            <button
+              type="button"
+              className={`flex-1 py-3 rounded-r-lg font-medium transition-colors ${
+                userType === "doctor" ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+              onClick={() => setUserType("doctor")}
+            >
+              Doctor
+            </button>
+          </div>
 
-                    {/* Google Sign-Up */}
-                    <SocialButton
-                        icon={FcGoogle}
-                        provider="Google"
-                        className="bg-blue-600 mb-3"
-                        onClick={handleGoogleSignIn}
-                    />
+          {/* Google Sign-Up */}
+          <SocialButton
+            icon={FcGoogle}
+            provider="Google"
+            className="bg-blue-600 mb-3"
+            onClick={handleGoogleSignIn}
+          />
 
-                    {/* Separator */}
-                    <div className="my-6 flex items-center">
-                        <div className="flex-1 border-t border-gray-300"></div>
-                        <span className="px-4 text-gray-500 text-sm">OR</span>
-                        <div className="flex-1 border-t border-gray-300"></div>
-                    </div>
+          {/* Separator */}
+          <div className="my-6 flex items-center">
+            <div className="flex-1 border-t border-gray-300"></div>
+            <span className="px-4 text-gray-500 text-sm">OR</span>
+            <div className="flex-1 border-t border-gray-300"></div>
+          </div>
 
-                    {/* Error Message */}
-                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          {/* Error Message */}
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-                    {/* Sign-Up Form */}
-                    <form onSubmit={handleSubmit}>
-                        <InputField
-                            label="First Name"
-                            placeholder="Alexa"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            required
-                        />
+          {/* Sign-Up Form */}
+          <form onSubmit={handleSubmit}>
+            <InputField
+              label="First Name"
+              placeholder="Alexa"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
 
-                        <InputField
-                            label="Last Name"
-                            placeholder="Mathew"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            required
-                        />
+            <InputField
+              label="Last Name"
+              placeholder="Mathew"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
 
-                        <InputField
-                            label="Email Address"
-                            type="email"
-                            placeholder="abc@google.com"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
+            <InputField
+              label="Email Address"
+              type="email"
+              placeholder="abc@google.com"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
 
+<<<<<<< Updated upstream
                         <InputField
                             label="Password"
                             type="password"
@@ -228,19 +311,32 @@ export default function SignupPage() {
                                    placeholder="Enter your 12-digit Aadhar Number" 
                                    name="AdharNumber" 
                                    value={formData.AdharNumber} onChange={handleChange} required />
+=======
+            <InputField
+              label="Password"
+              type="password"
+              placeholder="********"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength={6}
+            />
+>>>>>>> Stashed changes
 
-                        {/* Additional Fields for Doctors */}
-                        {userType === 'doctor' && (
-                            <>
-                                <InputField
-                                    label="Specialty"
-                                    placeholder="Cardiologist"
-                                    name="specialty"
-                                    value={formData.specialty}
-                                    onChange={handleChange}
-                                    required
-                                />
+            {/* Additional Fields for Doctors */}
+            {userType === "doctor" && (
+              <>
+                <InputField
+                  label="Specialty"
+                  placeholder="Cardiologist"
+                  name="specialty"
+                  value={formData.specialty}
+                  onChange={handleChange}
+                  required
+                />
 
+<<<<<<< Updated upstream
                                 <InputField
                                     label="Location"
                                     placeholder="New York"
@@ -257,33 +353,48 @@ export default function SignupPage() {
                             </>
                             
                         )}
+=======
+                <InputField
+                  label="Location"
+                  placeholder="New York"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                />
+              </>
+            )}
+            
+            <button
+              type="submit"
+              className="w-full bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 transition-colors mb-4"
+            >
+              {userType === "doctor"
+                ? "Sign up as Doctor"
+                : "Sign up as Patient"}
+            </button>
+          </form>
+>>>>>>> Stashed changes
 
-                        <button
-                            type="submit"
-                            className="w-full bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600 transition-colors mb-4"
-                        >
-                            {userType === 'doctor' ? 'Sign up as Doctor' : 'Sign up as Patient'}
-                        </button>
-                    </form>
-
-                    {/* Footer Link */}
-                    <p className="text-center text-gray-600">
-                        Already have an account?{' '}
-                        <Link to="/login" className="text-blue-600 hover:underline">
-                            Log in
-                        </Link>
-                    </p>
-                </div>
-            </div>
-
-            {/* Right Side - Welcome Message */}
-            <div className="hidden lg:flex w-1/2 bg-gray-100 p-8 flex-col items-center justify-center">
-                <div className="w-32 h-32 bg-gray-300 rounded-full mb-8"></div>
-                <h2 className="text-3xl font-bold mb-4">Welcome to Medi-Chain</h2>
-                <p className="text-gray-600 text-center max-w-md">
-                    "Your health, your control – MediTrack simplifies care, secures your records, and connects you to better healthcare anytime, anywhere."
-                </p>
-            </div>
+          {/* Footer Link */}
+          <p className="text-center text-gray-600">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Log in
+            </Link>
+          </p>
         </div>
-    );
+      </div>
+
+      {/* Right Side - Welcome Message */}
+      <div className="hidden lg:flex w-1/2 bg-gray-100 p-8 flex-col items-center justify-center">
+        <div className="w-32 h-32 bg-gray-300 rounded-full mb-8"></div>
+        <h2 className="text-3xl font-bold mb-4">Welcome to Medi-Chain</h2>
+        <p className="text-gray-600 text-center max-w-md">
+          "Your health, your control – MediTrack simplifies care, secures your
+          records, and connects you to better healthcare anytime, anywhere."
+        </p>
+      </div>
+    </div>
+  );
 }
